@@ -1,0 +1,64 @@
+<div class="page fade-in">
+  <div class="page-header">
+    <div>
+      <h2>Leave Approvals</h2>
+      <p class="subtitle">Review and manage pending leave requests</p>
+    </div>
+    <span class="pending-count" *ngIf="pendingLeaves.length">
+      {{ pendingLeaves.length }} pending
+    </span>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card" *ngIf="pendingLeaves.length">
+    <table mat-table [dataSource]="pendingLeaves" class="full-width">
+      <ng-container matColumnDef="employeeId">
+        <th mat-header-cell *matHeaderCellDef>Employee ID</th>
+        <td mat-cell *matCellDef="let l">{{ l.employeeId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="leaveType">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let l">
+          <span class="leave-type-badge">{{ l.leaveType }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="startDate">
+        <th mat-header-cell *matHeaderCellDef>From</th>
+        <td mat-cell *matCellDef="let l">{{ l.startDate }}</td>
+      </ng-container>
+      <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef>To</th>
+        <td mat-cell *matCellDef="let l">{{ l.endDate }}</td>
+      </ng-container>
+      <ng-container matColumnDef="reason">
+        <th mat-header-cell *matHeaderCellDef>Reason</th>
+        <td mat-cell *matCellDef="let l">{{ l.reason }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let l">
+          <div class="action-cell">
+            <mat-form-field appearance="outline" class="notes-field">
+              <mat-label>Notes</mat-label>
+              <input matInput [(ngModel)]="reviewNotes[l.id]" placeholder="Optional notes">
+            </mat-form-field>
+            <button class="pill-btn approve" (click)="approve(l)" matTooltip="Approve">
+              <mat-icon>check</mat-icon> Approve
+            </button>
+            <button class="pill-btn reject" (click)="reject(l)" matTooltip="Reject">
+              <mat-icon>close</mat-icon> Reject
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <div class="empty-state" *ngIf="!pendingLeaves.length">
+    <mat-icon>task_alt</mat-icon>
+    <h3>All Clear</h3>
+    <p>No pending leave requests to review.</p>
+  </div>
+</div>
